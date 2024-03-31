@@ -1,0 +1,186 @@
+{% extends 'layout.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<h2>Student List <button class="btn btn-primary float-right" data-toggle="modal" data-target="#myModal">Add Student</button></h2>
+
+{%with messages = get_flashed_messages()%}
+{%if messages%}
+{% for message in messages %}
+<div class="alert alert-success alert-dismissable" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    {{message}}
+</div>
+{%endfor%}
+{%endif%}
+{%endwith%}
+
+
+
+    <!-- Enter New Student Modal -->
+    <div id="myModal" class="modal fade" role="dialog" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+   
+                <div class="modal-header">
+                    <h5 class="modal-title text-primary" style="align-content: center;">Please Add New Student</h5>    
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  
+
+                <div class="modal-body">
+                    
+                    <form action="{{ url_for('insert')}}" method="POST">
+                        <div class="form-group">
+                          <label>Name</label>
+                          <input type="text" name="name" class="form-control" id="exampleFormControlInput1" placeholder="Enter Name">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Roll Number</label>
+                            <input type="text" name="roll" class="form-control" id="exampleFormControlInput1" placeholder="Enter Roll Number">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Academic Year</label>
+                            <input type="text" name="academic"  class="form-control" id="exampleFormControlInput1" placeholder="Enter Academic Year">
+                          </div>
+
+                          <div class="form-group">
+                            <label>Outlook Mail</label>
+                            <input type="text" name="mail"  class="form-control" id="exampleFormControlInput1" placeholder="Enter Outlook Mail">
+                          </div>
+
+                          <div class="form-group">
+                            <label>Date of Birth</label>
+                            <input type="text" name="dob"  class="form-control" id="exampleFormControlInput1" placeholder="Enter Date of Birth">
+                          </div>
+
+                          <button type="submit" class="btn btn-primary mb-2">Save</button>
+                     
+                      </form>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- End of Enter New Student Modal -->
+
+
+
+
+<table class="table table-hover" style="background-color: white;">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Roll No.</th>
+            <th scope="col">Academic Year</th>
+            <th scope="col">Outlook Mail</th>
+            <th scope="col">Date of Birth</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in students %}
+        <tr>
+        <td>{{row.0}}</td>
+        <td>{{row.1}}</td>
+        <td>{{row.2}}</td>
+        <td>{{row.3}}</td>
+        <td>{{row.4}}</td>
+        <td>{{row.5}}</td>
+        <td>
+            <a href="/update/{{row.0}}" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modaledit{{row.0}}">Edit</a>
+            <a href="/delete/{{ row.0 }}" onclick="return confirm('Are Sure Want To Deleted ?')" class="btn btn-danger btn-sm">Delete</a>
+
+        </td>
+    </tr>
+
+
+        <!-- Enter New Student Modal -->
+        <div id="modaledit{{row.0}}" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+       
+                    <div class="modal-header">
+                        <h5 class="modal-title text-primary" style="align-content: center;">Update Student Details</h5>    
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      
+    
+                    <div class="modal-body">
+                        
+                        <form action="{{ url_for('update')}}" method="POST">
+                            <input type="hidden" name="id" value="{{row.0}}">
+                            <div class="form-group">
+                              <label>Name</label>
+                              <input value="{{row.1}}" type="text" name="name" class="form-control" id="exampleFormControlInput1" placeholder="Enter Name">
+                            </div>
+    
+                            <div class="form-group">
+                                <label>Roll Number</label>
+                                <input value="{{row.2}}" type="text" name="roll" class="form-control" id="exampleFormControlInput1" placeholder="Enter Roll Number">
+                            </div>
+    
+                            <div class="form-group">
+                                <label>Academic Year</label>
+                                <input value="{{row.3}}" name="academic" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter Academic Year">
+                              </div>
+    
+                              <div class="form-group">
+                                <label>Outlook Mail</label>
+                                <input value="{{row.4}}" name="mail" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter Outlook Mail">
+                              </div>
+
+                              <div class="form-group">
+                                <label>Date of Birth</label>
+                                <input value="{{row.5}}" name="dob" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter Date of Birth">
+                              </div>
+                              <button type="submit" class="btn btn-success mb-2">Update</button>
+                         
+                          </form>
+    
+    
+                    </div>
+                </div>
+            </div>
+    
+        </div>
+    
+    
+        <!-- End of Edit Student Modal -->
+
+
+
+
+        {% endfor %}
+    </tbody>
+
+</table>
+            </div>
+            <!-- Content ends here-->
+
+
+            <div class="col-sm-2"></div>
+
+        </div>
+    </div>
+
+ <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.2.1.min.js') }}"></script>    
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>    
+
+{% endblock %}
